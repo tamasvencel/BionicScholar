@@ -75,3 +75,13 @@ Bionic Reading is a technique that enhances reading speed and retention by boldi
 
 2.  Create a virtual environment and activate it:
     python -m venv venv
+    venv\Scripts\activate
+
+3. Install required dependencies:
+    pip install -r requirements.txt
+
+4. Run migrations:
+    python manage.py migrate
+
+5. Start server:
+    python manage.py runserver
