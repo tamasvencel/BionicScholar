@@ -1,3 +1,4 @@
+
 # BionicScholar
 
 Welcome to the **BionicScholar** repository! BionicScholar is a platform designed to simplify and enhance the research reading experience by **summarizing research papers** and applying **Bionic Reading** techniques for easier comprehension.
@@ -52,19 +53,20 @@ Bionic Reading is a technique that enhances reading speed and retention by boldi
 
 1.  Clone the repository and navigate to the frontend directory:
 
-    git clone https://github.com/tamasvencel/BionicScholar.git
-    cd BionicScholar
-    cd frontend
+	    git clone https://github.com/tamasvencel/BionicScholar.git
+	    cd BionicScholar
+	    cd frontend
 
 2.  Install dependencies:
-    yarn install
 
-3.  Create an `.env.local` file with any necessary environment variables for the frontend (e.g., API endpoint URLs).
-4.  Start the development server:
+	    yarn install
+
+4.  Create an `.env.local` file with any necessary environment variables for the frontend (e.g., API endpoint URLs).
+5.  Start the development server:
 
         yarn dev
 
-5.  Visit `http://localhost:3000` in your browser to view the app.
+6.  Visit `http://localhost:3000` in your browser to view the app.
 
 ### Backend Installation
 
@@ -74,14 +76,18 @@ Bionic Reading is a technique that enhances reading speed and retention by boldi
         cd backend
 
 2.  Create a virtual environment and activate it:
-    python -m venv venv
-    venv\Scripts\activate
+
+	    python -m venv venv
+	    venv\Scripts\activate
 
 3. Install required dependencies:
-    pip install -r requirements.txt
+
+	    pip install -r requirements.txt
 
 4. Run migrations:
-    python manage.py migrate
+
+	    python manage.py migrate
 
 5. Start server:
-    python manage.py runserver
+
+	    python manage.py runserver
