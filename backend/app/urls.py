@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import TEST
+from .views import testLLM
 
 urlpatterns = [
-    path("test/", TEST.as_view(), name="SimpleName")
+    path("test-llm/", testLLM.as_view(), name="test_llm")
 ]
