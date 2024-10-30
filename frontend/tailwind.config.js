@@ -12,6 +12,7 @@ export default {
         primary: '#EBE8E7',
         secondary: '#136A5C',
         neutrals: {
+          100: '#f1efee',
           900: '#171718',
           800: '#212122',
           700: '#4E4E51',
