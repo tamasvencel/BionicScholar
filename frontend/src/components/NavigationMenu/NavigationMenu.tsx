@@ -3,7 +3,7 @@ import { NAV_LINKS } from '../../utils';
 
 export const NavigationMenu = () => {
   return (
-    <header className='flex justify-center'>
+    <header className='absolute top-3 left-1/2 -translate-x-1/2 flex justify-center'>
       <nav className='flex flex-col gap-7 justify-center items-center'>
         <h1 className='font-bold text-2xl justify-self-center'>BionicScolar</h1>
         <ul className='flex gap-5 items-center justify-center'>
