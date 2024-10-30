@@ -1,5 +1,5 @@
+import { NavLinkAtom } from '../../atoms';
 import { NAV_LINKS } from '../../utils';
-import { NavLinkAtom } from '../../atoms/NavLinkAtom';
 
 export const NavigationMenu = () => {
   return (
