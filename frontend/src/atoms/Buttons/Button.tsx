@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 interface ButtonProps {
   to: string;
   label: string;
+  className?: string;
 }
 
-export const Button: React.FC<ButtonProps> = ({ to, label }) => {
+export const Button: React.FC<ButtonProps> = ({ to, label, className }) => {
   return (
-    <Link to={to} className='bg-secondary text-white py-4 px-8'>
+    <Link to={to} className={className}>
       {label}
     </Link>
   );

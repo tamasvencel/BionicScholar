@@ -2,15 +2,15 @@ import { NavLinkType } from './types';
 
 export const NAV_LINKS: NavLinkType[] = [
   {
-    to: '/',
+    to: '#home',
     name: 'Home',
   },
   {
-    to: '#',
+    to: '#about',
     name: 'About',
   },
   {
-    to: '#',
+    to: '#services',
     name: 'Services',
   },
 ];
