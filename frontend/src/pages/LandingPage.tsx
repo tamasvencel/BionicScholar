@@ -1,12 +1,12 @@
 import { NavigationMenu } from '../components';
-import { HeroSection } from '../sections';
+import { AboutSection, HeroSection } from '../sections';
 
 export const LandingPage = () => {
   return (
     <>
       <NavigationMenu />
       <HeroSection />
-
+      <AboutSection />
     </>
   );
 };
