@@ -1,5 +1,6 @@
 import { NavigationMenu } from '../components';
 import { AboutSection, HeroSection } from '../sections';
+import { ServicesSection } from '../sections/ServicesSection/ServicesSection';
 
 export const LandingPage = () => {
   return (
@@ -7,6 +8,7 @@ export const LandingPage = () => {
       <NavigationMenu />
       <HeroSection />
       <AboutSection />
+      <ServicesSection />
     </>
   );
 };
