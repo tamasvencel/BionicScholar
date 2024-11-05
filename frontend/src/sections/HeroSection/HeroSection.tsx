@@ -3,7 +3,7 @@ import hero from '../../assets/images/hero.png';
 
 export const HeroSection = () => {
   return (
-    <section id='#home'>
+    <section id='home'>
       <div className='flex bg-primary-100 flex-col gap-5  items-center px-4 '>
         <div className='max-w-lg pt-14 flex flex-col justify-center items-center'>
           <h1 className='font-normal text-4xl leading-10'>BionicScolar</h1>

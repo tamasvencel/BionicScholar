@@ -1,6 +1,6 @@
 export const AboutSection: React.FC = () => {
   return (
-    <section className='h-screen bg-neutral-800 flex items-center justify-center text-center px-5'>
+    <section id='about' className='h-screen bg-neutral-800 flex items-center justify-center text-center px-5'>
       <div className='text-white max-w-md flex flex-col gap-2'>
         <h2 className='flex items-center gap-2 justify-center uppercase font-normal text-base'>
           <span className='w-2 h-2 bg-primary-100'></span>
