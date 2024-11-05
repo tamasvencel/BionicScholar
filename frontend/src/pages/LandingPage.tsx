@@ -1,5 +1,5 @@
 import { NavigationMenu } from '../components';
-import { AboutSection, HeroSection } from '../sections';
+import { AboutSection, Footer, HeroSection } from '../sections';
 import { ServicesSection } from '../sections/ServicesSection/ServicesSection';
 
 export const LandingPage = () => {
@@ -9,6 +9,7 @@ export const LandingPage = () => {
       <HeroSection />
       <AboutSection />
       <ServicesSection />
+      <Footer />
     </>
   );
 };

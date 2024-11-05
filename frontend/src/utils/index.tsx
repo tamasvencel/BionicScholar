@@ -1,3 +1,3 @@
 export * from './types';
-export * from './consts';
+export * from './consants';
 export * from './utils';
