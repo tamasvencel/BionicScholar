@@ -1,30 +1,25 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .research_paper_analyzer import analyzeResearchPaper
+from .models import Doc
 
 # test LLM endpoint
-class testLLM(APIView):
+class UploadDocView(APIView):
+
     def post(self, request):
+        """
+        Endpoint for uploading and processing .pdf files
+        """
 
-        sys_message = request.data.get("sysMessage")
-        hum_message = request.data.get("humMessage")
+        file = request.FILES['file']
 
-        if not sys_message or not hum_message:
-            return Response({
-                "error": "Both 'sysMessage' and 'humMessage' are required."
-            }, status=status.HTTP_400_BAD_REQUEST)
-        
-        analyzer = analyzeResearchPaper()
+        file_name = str(file)[:str(file).rfind(".")]
 
-        try:
-            result = analyzer.askLLM(sys_message, hum_message)
-        except Exception as e:
-            return Response({
-                "error": f"Error while communicating with LLM: {str(e)}"
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
+        researchPaper = Doc(file=file)
+        researchPaper.save()
              
         return Response(
             {
-            "response": result, 
+            "message": f"Research paper '{file_name}' successfully uploaded.",
+            "file_name": researchPaper.file.name
             }, status=status.HTTP_200_OK)
