@@ -1,16 +1,27 @@
+import { cn } from '../../utils';
+
 interface ToggleButtonProps {
-  isChecked?: boolean;
-  label: string;
+  isToggled: boolean;
+  onToggle: () => void;
   className?: string;
-  handleToggle?: () => void;
 }
 
-export const ToggleButton: React.FC<ToggleButtonProps> = ({ isChecked, className, label, handleToggle }) => {
+export const ToggleButton: React.FC<ToggleButtonProps> = ({ isToggled, onToggle, className }) => {
   return (
-    <label className={`inline-flex items-center cursor-pointer ${className}`}>
-      <input type='checkbox' value='' className='sr-only peer inline-block' />
-      <div className="relative w-11 h-6 bg-secondary-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-secondary-100 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-neutral-800"></div>
-      <span className='ms-3 text-sm font-medium text-neutral-900 '>{label}</span>
+    <label className={cn('inline-flex items-center cursor-pointer mt-4', className)}>
+      <input type='checkbox' className='sr-only peer' checked={isToggled} onChange={onToggle} />
+      <div
+        className={`relative w-11 h-6 rounded-full transition-colors duration-300 ${
+          isToggled ? 'bg-neutral-600' : 'bg-gray-300'
+        } peer-focus:ring-4 peer-focus:ring-neutral-400`}
+      >
+        <div
+          className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 transform ${
+            isToggled ? 'translate-x-full' : ''
+          }`}
+        />
+      </div>
+      <span className='ml-3 text-sm font-medium text-gray-900'>Bionic Reading</span>
     </label>
   );
 };
