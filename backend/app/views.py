@@ -4,6 +4,8 @@ from rest_framework import status
 from .models import Doc
 from .serializers import ResearchPaperSerializer
 
+from .research_paper_analyzer import AnalyzeResearchPaper
+
 # upload document endpoint
 class UploadDocView(APIView):
 
@@ -22,6 +24,12 @@ class UploadDocView(APIView):
 
             researchPaper = Doc(file=file)
             researchPaper.save()
+
+            # temporary (before websocket implementation)
+            research_paper_analyzer = AnalyzeResearchPaper(
+                filename=file_name
+            )
+            research_paper_analyzer.generate_pdf()
                 
             return Response(
                 {
@@ -31,3 +39,4 @@ class UploadDocView(APIView):
         
         # if invalid return the errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
