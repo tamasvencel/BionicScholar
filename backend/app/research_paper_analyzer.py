@@ -16,7 +16,7 @@ class AnalyzeResearchPaper:
     # initialize LLM connection
     __llm = HuggingFaceEndpoint(
         repo_id=__model_name,
-        temperature=0.01,
+        temperature=0.001,
         model_kwargs={"max_length": 4096},
         huggingfacehub_api_token=__api_key
     )
@@ -34,7 +34,9 @@ class AnalyzeResearchPaper:
         
         pdf_text = self.__extract_text_from_images(image_paths=pdf_text_or_image_paths) if not pdf_isReadable else pdf_text_or_image_paths
         
-        print(pdf_text)
+        analyzed_pdf = self.__extract_info(document=pdf_text)
+        
+        print(analyzed_pdf)
 
     def __load_pdf(self, file_path):
         """
@@ -106,16 +108,73 @@ class AnalyzeResearchPaper:
         
         return text_from_image, image_idx
 
-    # def __extract_info(self):
-    #     messages = [
-    #         (
-    #             "system",
-    #             sysMessage
-    #         )
-    #     ]
+    def __extract_info(self, document):
+        """
+        Extract specific information, summarize and optionally apply bionic reading on research paper
+        """
+        # Extract information based on specific key points
+        sys_message = [
+            (
+                "system",
+                f"""
+                You are a professional researcher specializing in academic papers. Your role is to extract essential information from research documents and produce a comprehensive summary that distills the core findings, objectives, methods, contributions, and implications while maintaining clarity, precision, and conciseness.
 
-    #     self.__llm.invoke(messages)
+                The key points to capture:
+                
+                <Research Objective>: Identify and articulate the main research question or hypothesis. What is the central aim or point of the research? 
+                <Research Methods and Measurements>: Extract detailed descriptions of the methodologies used, including any experiments, measurements employed in the study.
+                <Key Findings and Results>: Highlight the most important findings and results of the research, emphasizing new insights or discoveries. 
+                <Conclusions and Implications>: Summarize the conclusions drawn by the researchers and the broader implications of their findings in the context of the field. 
+                <Limitations>: Identify any limitations or constraints discussed by the authors, such as sample size, methodological restrictions, or other factors that affect the generalizability of the results. 
+                <References to Future Work>: Capture any mention of future research directions or open questions posed by the authors.
 
-    #     result = self.__llm.invoke(humMessage)
+                Please provide the response as follows:
+                - Only put bullet points (•) to the key point titles <Research Objective>, <Research Methods and Measurements>, <Key Findings and Results>, <Conclusions and Implications>, <Limitations>, <References to Future Work>. All provided key points should be present: <Research Objective>, <Research Methods and Measurements>, <Key Findings and Results>, <Conclusions and Implications>, <Limitations>, <References to Future Work>.
+                - Separate each key point with two new line characters.
+                - Do not end abruptly, ensure that the response is fully completed without truncating any thoughts or sentences.
+                - Each key point section should contain no longer than 10 sentences.
+                
+                The research paper: {document}
+                """
+            )
+        ]
 
-    #     return result
+        key_points = self.__llm.invoke(sys_message)
+        
+        final_key_points= self.__truncate_text_after_last_period(key_points)
+        
+        # Summarize the research paper
+        hum_message = [
+            (
+                "human",
+                f"""
+                Forget everything I have asked you before.
+                Create comprehensive summary of the research paper provided below while maintaining clarity, precision, and conciseness.
+                
+                Please provide the response as follows:
+                - Don not use any bullet points, just make the titles bold and format the summary into paragraphs.
+                - Your summary should be long with long paragraphs, the summary should be more then 10 pdf pages long (which is more than 30000 characters long)
+                - Don not repeat words too much, try to make your summary clear and precise.
+                - Do not end the summary abruptly, ensure that the response is fully completed without truncating the end of the summary.
+                
+                The research paper: {document}
+                """
+            )
+        ]
+        
+        summary = self.__llm.invoke(hum_message)
+        
+        final_summary = self.__truncate_text_after_last_period(summary)
+        
+        result = "\n\n".join([final_key_points, final_summary])
+        
+        return result
+        
+    # Fix abruptly ended text
+    def __truncate_text_after_last_period(self, text):
+        last_period_index = text.rfind(".")
+        
+        # If a period exists, truncate the text at that point, otherwise return the text as it is.
+        if last_period_index != -1:
+            return text[:last_period_index + 1]
+        return text
