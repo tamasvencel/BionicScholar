@@ -3,8 +3,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Doc
 from .serializers import ResearchPaperSerializer
-
 from .research_paper_analyzer import AnalyzeResearchPaper
+import os
+from django.conf import settings
+import shutil
 
 # upload document endpoint
 class UploadDocView(APIView):
@@ -21,6 +23,10 @@ class UploadDocView(APIView):
             file = serializer.validated_data['file']
 
             file_name = str(file)[:str(file).rfind(".")]
+            
+            # remove research_papers folder and its content if it already exists
+            if os.path.exists(f"{settings.MEDIA_ROOT}/research_papers/"):
+                shutil.rmtree(f"{settings.MEDIA_ROOT}/research_papers/")
 
             researchPaper = Doc(file=file)
             researchPaper.save()
@@ -29,7 +35,7 @@ class UploadDocView(APIView):
             research_paper_analyzer = AnalyzeResearchPaper(
                 filename=file_name
             )
-            research_paper_analyzer.generate_pdf()
+            research_paper_analyzer.analyzePDF()
                 
             return Response(
                 {

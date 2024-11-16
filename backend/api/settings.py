@@ -12,15 +12,15 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
-
 import os
+import platform
+import pytesseract
 
 # Load env variables
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -33,6 +33,22 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 
 ALLOWED_HOSTS = []
 
+# Specify tesseract path
+
+# Get current operating system
+current_os = platform.system()
+
+# Specify the Tesseract path based on the operating sytem
+if current_os == "Windows":
+    tesseract_path = os.path.join(os.getcwd(), "app", "tesseract", "tesseract.exe")
+elif current_os == 'Darwin':  # MacOS
+    # Path to the bundled Tesseract executable for MacOS
+    tesseract_path = os.path.join(os.getcwd(), 'tesseract', 'tesseract')
+elif current_os == 'Linux':
+    # Path to the bundled Tesseract executable for Linux
+    tesseract_path = os.path.join(os.getcwd(), 'tesseract', 'tesseract')
+       
+pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
 # Application definition
 
