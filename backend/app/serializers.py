@@ -4,6 +4,7 @@ import magic
 class ResearchPaperSerializer(serializers.Serializer):
     # field to handle file uploads
     file = serializers.FileField()
+    bionic_reading = serializers.BooleanField(required=True)
 
     def validate_file(self, doc):
         # define allowed file extension and mime type
