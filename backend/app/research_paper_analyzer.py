@@ -5,6 +5,9 @@ import fitz
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from PIL import Image
 import pytesseract
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import re
 
 from langchain_huggingface import HuggingFaceEndpoint
 from langchain_community.document_loaders import PyPDFLoader
@@ -21,8 +24,9 @@ class AnalyzeResearchPaper:
         huggingfacehub_api_token=__api_key
     )
 
-    def __init__(self, filename):
+    def __init__(self, filename, bionic_reading=False):
         self.research_paper_file_path = f"research_papers/{filename}.pdf"
+        self.bionic_reading = bionic_reading
 
     def analyzePDF(self):
         """
@@ -32,11 +36,27 @@ class AnalyzeResearchPaper:
         # Load and process PDF
         pdf_text_or_image_paths, pdf_isReadable = self.__load_pdf(file_path=self.research_paper_file_path)
         
+        # Extract text from PDF
         pdf_text = self.__extract_text_from_images(image_paths=pdf_text_or_image_paths) if not pdf_isReadable else pdf_text_or_image_paths
         
-        analyzed_pdf = self.__extract_info(document=pdf_text)
+        # Extract information from PDF
+        analyzed_pdf_text = self.__extract_info(document=pdf_text)
+
+        print(analyzed_pdf_text)
+
+        # Define the output path for the new PDF
+        output_pdf_name = os.path.basename(self.research_paper_file_path) # Get the original file name with extension
+        output_pdf_name = output_pdf_name[:output_pdf_name.rfind(".")] + "_analyzed.pdf" # Remove extension and add "_analyzed"
+        output_pdf_dir = f"{settings.MEDIA_ROOT}/output_pdf"
+        output_pdf_path = f"{output_pdf_dir}/{output_pdf_name}"
+
         
-        print(analyzed_pdf)
+        if not os.path.exists(output_pdf_dir):
+            os.makedirs(output_pdf_dir)
+        
+        self.__generate_pdf_with_bionic_reading(analyzed_pdf_text, output_pdf_path)
+
+        print(f"Analyzed PDF saved at {output_pdf_path}")
 
     def __load_pdf(self, file_path):
         """
@@ -178,3 +198,85 @@ class AnalyzeResearchPaper:
         if last_period_index != -1:
             return text[:last_period_index + 1]
         return text
+
+    def __generate_pdf_with_bionic_reading(self, input_text, output_pdf_path):
+        """
+        Generate a PDF with optional bionic reading (bolding first half of words).
+        """
+
+        # Create a PDF canvas
+        canv = canvas.Canvas(output_pdf_path, pagesize=letter)
+        width, height = letter
+
+        # Set the starting position for the text on the page
+        x = 50
+        y = height - 50
+
+        # Set the font for the PDF
+        canv.setFont("Helvetica", 12)
+
+        lines = input_text.splitlines()
+
+        for line in lines:
+            words_and_symbols = re.findall(r"\S+|\s", line)
+
+            for word in words_and_symbols:
+                # Check if the current word will exceed the width of the page, if so, wrap it to the next line
+                word_width = canv.stringWidth(word, "Helvetica", 12)
+                if x + word_width > width - 50:
+                    x = 50  # Reset x to the left margin
+                    y -= 14  # Move down to the next line
+                    
+                     # If y position goes off the page, create a new page
+                    if y < 50:
+                        canv.showPage()  # Finalize the current page
+                        canv.setFont("Helvetica", 12)  # Set font for the new page
+                        x = 50  # Reset x to the left margin for the new page
+                        y = height - 50  # Reset y to the top for the new page
+                    
+                if self.bionic_reading and word.strip(): # Only apply to non-whitespace words
+                    # Apply bionic reading: bold the first half of the word
+                    first_half, second_half = self.__bold_half_of_word(word)
+
+                    # Draw the first half in bold
+                    canv.setFont("Helvetica-Bold", 12)
+                    canv.drawString(x, y, first_half)
+
+                    # Move the cursor forward by the width of the first half of the word
+                    x += canv.stringWidth(first_half, "Helvetica-Bold", 12)
+
+                    # Draw the second half in normal font
+                    canv.setFont("Helvetica", 12)
+                    canv.drawString(x, y, second_half)
+
+                    # Move the cursor forward by the width of the second half
+                    x += canv.stringWidth(second_half, "Helvetica", 12)
+                else:
+                    # Regular text (no bionic reading applied)
+                    canv.setFont("Helvetica", 12)
+                    canv.drawString(x, y, word)
+                    x += word_width
+
+                x += canv.stringWidth(" ", "Helvetica", 12)
+            
+            # After processing the line, reset x and move to the next line
+            x = 50
+            y -= 14  # Move down by one line after finishing a line of text
+
+            # If y position goes off the page, create a new page
+            if y < 50:
+                canv.showPage()
+                canv.setFont("Helvetica", 12)
+                x = 50
+                y = height - 50
+
+        canv.save()
+
+    def __bold_half_of_word(self, word):
+        """
+        Bold the first half of the word and return the two parts.
+        """
+        mid = len(word) // 2
+        first_half = word[:mid]
+        second_half = word[mid:]
+        return first_half, second_half
