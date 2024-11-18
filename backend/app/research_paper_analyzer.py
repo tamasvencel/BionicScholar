@@ -209,8 +209,8 @@ class AnalyzeResearchPaper:
         width, height = letter
 
         # Set the starting position for the text on the page
-        x = 72
-        y = height - 72
+        x = 50
+        y = height - 50
 
         # Set the font for the PDF
         canv.setFont("Helvetica", 12)
@@ -221,6 +221,19 @@ class AnalyzeResearchPaper:
             words_and_symbols = re.findall(r"\S+|\s", line)
 
             for word in words_and_symbols:
+                # Check if the current word will exceed the width of the page, if so, wrap it to the next line
+                word_width = canv.stringWidth(word, "Helvetica", 12)
+                if x + word_width > width - 50:
+                    x = 50  # Reset x to the left margin
+                    y -= 14  # Move down to the next line
+                    
+                     # If y position goes off the page, create a new page
+                    if y < 50:
+                        canv.showPage()  # Finalize the current page
+                        canv.setFont("Helvetica", 12)  # Set font for the new page
+                        x = 50  # Reset x to the left margin for the new page
+                        y = height - 50  # Reset y to the top for the new page
+                    
                 if self.bionic_reading and word.strip(): # Only apply to non-whitespace words
                     # Apply bionic reading: bold the first half of the word
                     first_half, second_half = self.__bold_half_of_word(word)
@@ -242,23 +255,20 @@ class AnalyzeResearchPaper:
                     # Regular text (no bionic reading applied)
                     canv.setFont("Helvetica", 12)
                     canv.drawString(x, y, word)
-                    x += canv.stringWidth(word, "Helvetica", 12)
+                    x += word_width
 
-                # If the word goes beyond the page width, move to the next line
-                if x > width - 72:
-                    x = 72
-                    y -= 14  # Move down by one line
+                x += canv.stringWidth(" ", "Helvetica", 12)
             
             # After processing the line, reset x and move to the next line
-            x = 72
+            x = 50
             y -= 14  # Move down by one line after finishing a line of text
 
             # If y position goes off the page, create a new page
-            if y < 72:
+            if y < 50:
                 canv.showPage()
                 canv.setFont("Helvetica", 12)
-                x = 72
-                y = height - 72
+                x = 50
+                y = height - 50
 
         canv.save()
 

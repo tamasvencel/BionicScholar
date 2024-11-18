@@ -1,5 +1,6 @@
 from rest_framework import serializers
 import magic
+from PyPDF2 import PdfReader
 
 class ResearchPaperSerializer(serializers.Serializer):
     # field to handle file uploads
@@ -24,5 +25,13 @@ class ResearchPaperSerializer(serializers.Serializer):
 
         if mime_type != allowed_mime:
             raise serializers.ValidationError("Invalid file type! The uploaded file is not a valid PDF.")
+        
+        # Check the number of pages in the PDF
+        pdf_reader = PdfReader(doc)
+        num_pages = len(pdf_reader.pages)
+        
+        # Limit the number of pages to 20 (that's the approximate pdf length for the LLM's max input token size)
+        if num_pages > 20:
+            raise serializers.ValidationError("The PDF file has more than 20 pages. Please upload a PDF with a maximum of 20 pages.")
         
         return doc
