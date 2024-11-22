@@ -50,10 +50,13 @@ class AnalyzeResearchPaper:
         output_pdf_dir = f"{settings.MEDIA_ROOT}/output_pdf"
         output_pdf_path = f"{output_pdf_dir}/{output_pdf_name}"
 
+        # remove output_dir folder and its content if it already exists
+        if os.path.exists(output_pdf_dir):
+            shutil.rmtree(output_pdf_dir)
         
         if not os.path.exists(output_pdf_dir):
             os.makedirs(output_pdf_dir)
-        
+            
         self.__generate_pdf_with_bionic_reading(analyzed_pdf_text, output_pdf_path)
 
         print(f"Analyzed PDF saved at {output_pdf_path}")
@@ -186,7 +189,25 @@ class AnalyzeResearchPaper:
         
         final_summary = self.__truncate_text_after_last_period(summary)
         
-        result = "\n\n".join([final_key_points, final_summary])
+        # get research paper title
+        title_prompt = [
+            (
+                "human",
+                f"""
+                Provide me the title of the document.
+                
+                Please provide the response as follows:
+                - |TITLE|
+                - before and after the | characters should be nothing.
+                
+                The research paper: {document}
+                """
+            )
+        ]
+        
+        title = self.__llm.invoke(title_prompt)
+        
+        result = "\n\n".join([title, final_key_points, f"Summary: ", final_summary])
         
         return result
         
@@ -211,11 +232,27 @@ class AnalyzeResearchPaper:
         # Set the starting position for the text on the page
         x = 50
         y = height - 50
+        
+        # Assuming the first line is the title, draw it first
+        lines = input_text.splitlines()
+        title_line = lines[0]  # Extract the first line as the title
+        
+         # Calculate the width of the title to center it
+        canv.setFont("Helvetica-Bold", 14)
+        title_width = canv.stringWidth(title_line, "Helvetica-Bold", 14)
+        title_x = (width - title_width) / 2  # Calculate the x position to center the title
+        
+        canv.drawString(title_x, y, title_line)  # Draw the title
+        y -= 20  # Move down after the title
 
-        # Set the font for the PDF
+        # Draw a horizontal line after the title
+        canv.line(x, y, width - 50, y)  # Line from left margin (x) to right margin (width - 50)
+        y -= 20  # Move down after the line
+
+        # Reset font for the body text
         canv.setFont("Helvetica", 12)
 
-        lines = input_text.splitlines()
+        lines = lines[1:]
 
         for line in lines:
             words_and_symbols = re.findall(r"\S+|\s", line)
