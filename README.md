@@ -88,6 +88,13 @@ Bionic Reading is a technique that enhances reading speed and retention by boldi
 
 	    python manage.py migrate
 
-5. Start server:
+5. (This is only needed if you don't use Windows operating system)
+	**Tesseract OCR**:
+		Tesseract is required for Optical Character Recognition (OCR) to process text scanned PDFs. It should be installed in the `backend/app/` folder.
+		To install Tesseract, download the executable from the official repository here:  
+[Tesseract GitHub Repository](https://github.com/tesseract-ocr/tesseract) 
+ Set it up to the`backend/app/` folder.
+
+6. Start server:
 
 	    python manage.py runserver
