@@ -1,15 +1,25 @@
-import { Link } from 'react-router-dom';
+import React from 'react';
 
-interface ButtonProps {
+interface LinkButtonProps {
   to: string;
   label: string;
   className?: string;
 }
 
-export const Button: React.FC<ButtonProps> = ({ to, label, className }) => {
+export const LinkButton: React.FC<LinkButtonProps> = ({ to, label, className }) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    if (to.startsWith('#')) {
+      e.preventDefault();
+      const targetElement = document.querySelector(to);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
-    <Link to={to} className={className}>
+    <a href={to} className={className} onClick={handleClick}>
       {label}
-    </Link>
+    </a>
   );
 };
