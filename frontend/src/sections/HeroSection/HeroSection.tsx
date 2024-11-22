@@ -1,4 +1,4 @@
-import { Button } from '../../atoms/Buttons/Button';
+import { LinkButton } from '../../atoms/Buttons/Button';
 import hero from '../../assets/images/hero.png';
 
 export const HeroSection = () => {
@@ -10,7 +10,7 @@ export const HeroSection = () => {
           <p className='font-light text-xl text-center mt-2'>
             A results-driven business dedicated to helping clients achieve their goals
           </p>
-          <Button
+          <LinkButton
             to='#services'
             label='View services'
             className='px-4 py-2 mt-4 text-white bg-secondary-600 hover:bg-secondary-700 focus:ring-4 focus:outline-none focus:ring-secondary-300'
