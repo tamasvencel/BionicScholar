@@ -1,11 +1,35 @@
+import axios from 'axios';
 import { useState } from 'react';
-// import axios from 'axios';
+import useWebSocket from 'react-use-websocket';
+import axios from 'axios';
 
 export const useUpload = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [buttonLabel, setButtonLabel] = useState('Upload');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [webSocketEndpoint, setWebSocketEndpoint] = useState<string | null>(null);
+
+  const [progressTotalSize, setProgressTotalSize] = useState(0);
+  const [stepMessage, setStepMessage] = useState('Step 1/2: processing permit');
+
+  const { sendJsonMessage, lastMessage } = useWebSocket(webSocketEndpoint, {
+    onOpen: () => console.log('WebSocket connection opened'),
+    onClose: () => console.log('WebSocket connection closed'),
+    onError: (error) => console.error('WebSocket error:', error),
+    onMessage: (message) => {
+      const data = JSON.parse(message.data);
+      console.log('WebSocket message received:', data);
+
+      if (data.type === 'progress') {
+        setProgressTotalSize(data.totalSize);
+      } else if (data.type === 'step') {
+        setStepMessage(data.message);
+      }
+    },
+    share: true,
+  });
 
   const validateFiles = (files: File[]) => {
     const invalidFiles = files.filter((file) => file.type !== 'application/pdf');
@@ -34,17 +58,20 @@ export const useUpload = () => {
 
         console.log('Uploading files:', formData.getAll('files'));
 
-        // Uncomment when backend is ready:
-        // await axios.post('https://your-backend-endpoint/upload', formData, {
-        //   headers: { 'Content-Type': 'multipart/form-data' },
-        // });
+        // await axios.post(
+        //   'https://your-backend-endpoint/upload',
+        //   { formData, isBionicReadingEnabled: isToggled },
+        //   {
+        //     headers: { 'Content-Type': 'multipart/form-data' },
+        //   }
+        // );
 
         setButtonLabel('Generate');
       } else if (buttonLabel === 'Generate') {
         console.log('Sending toggle state:', { isBionicReadingEnabled: isToggled });
 
-        // Uncomment when backend is ready:
         // await axios.post('https://your-backend-endpoint/generate', { isBionicReadingEnabled: isToggled });
+        // setWebSocketEndpoint('wss://your-backend-endpoint/ws');
 
         alert('Generate request simulated successfully.');
       }
