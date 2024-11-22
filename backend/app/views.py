@@ -21,7 +21,6 @@ class UploadDocView(APIView):
 
         if serializer.is_valid():
             file = serializer.validated_data['file']
-            bionic_reading = serializer.validated_data.get("bionic_reading", False) # Default to False if not provided
 
             file_name = str(file)[:str(file).rfind(".")]
             
@@ -31,13 +30,6 @@ class UploadDocView(APIView):
 
             researchPaper = Doc(file=file)
             researchPaper.save()
-
-            # temporary (before websocket implementation)
-            research_paper_analyzer = AnalyzeResearchPaper(
-                filename=file_name,
-                bionic_reading=bionic_reading
-            )
-            research_paper_analyzer.analyzePDF()
                 
             return Response(
                 {

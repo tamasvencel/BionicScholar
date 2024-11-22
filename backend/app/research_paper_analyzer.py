@@ -8,6 +8,7 @@ import pytesseract
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import re
+from channels.layers import get_channel_layer
 
 from langchain_huggingface import HuggingFaceEndpoint
 from langchain_community.document_loaders import PyPDFLoader
@@ -24,9 +25,13 @@ class AnalyzeResearchPaper:
         huggingfacehub_api_token=__api_key
     )
 
-    def __init__(self, filename, bionic_reading=False):
-        self.research_paper_file_path = f"research_papers/{filename}.pdf"
+    def __init__(self, group_name, send_progress_message, send_completed_message, bionic_reading=False):
+        self.group_name = group_name
+        self.channel_layer = get_channel_layer()
+        self.research_paper_file_path = f"research_papers/{self.group_name}.pdf"
         self.bionic_reading = bionic_reading
+        self.send_progress_message = send_progress_message
+        self.send_completed_message = send_completed_message
 
     def analyzePDF(self):
         """
@@ -46,7 +51,7 @@ class AnalyzeResearchPaper:
 
         # Define the output path for the new PDF
         output_pdf_name = os.path.basename(self.research_paper_file_path) # Get the original file name with extension
-        output_pdf_name = output_pdf_name[:output_pdf_name.rfind(".")] + "_analyzed.pdf" # Remove extension and add "_analyzed"
+        output_pdf_name = f"{self.group_name}" + "_analyzed.pdf" # Remove extension and add "_analyzed"
         output_pdf_dir = f"{settings.MEDIA_ROOT}/output_pdf"
         output_pdf_path = f"{output_pdf_dir}/{output_pdf_name}"
 
