@@ -32,8 +32,8 @@ class socketConsumer(WebsocketConsumer):
         """
         Called when the websocket connection closes.
         """
-        async_to_sync(self.channel_layer.groupd_discard)(
-            self.group_name, self.channel
+        async_to_sync(self.channel_layer.group_discard)(
+            self.group_name, self.channel_name
         )
 
     def pdf_analyzer(self, event):
