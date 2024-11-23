@@ -60,12 +60,13 @@ class socketConsumer(WebsocketConsumer):
             "progress": progress
         }))
 
-    def send_completed_message(self, filename, content):
+    def send_completed_message(self, message, pdf_url, progress):
         """
         Function to filename and its content.
         """
         self.send(text_data=json.dumps({
             "type": "completed",
-            "filename": filename,
-            "content": content
+            "message": message,
+            "pdf_url": pdf_url,
+            "progress": progress
         }))
