@@ -5,7 +5,18 @@ import { useState } from 'react';
 import { useUpload } from '../hooks/useUpload';
 
 export const UploadPage = () => {
-  const { selectedFiles, isUploading, buttonLabel, errorMessage, handleFilesSelected, handleUpload } = useUpload();
+  const {
+    selectedFile,
+    isUploading,
+    buttonLabel,
+    errorMessage,
+    handleFileSelected,
+    generating,
+    downloadPdf,
+    stepMessage,
+    pdfUrl,
+    handleUpload,
+  } = useUpload();
   const [isToggled, setIsToggled] = useState(false);
 
   // Drag-and-Drop should be disabled after a successful upload
@@ -27,22 +38,31 @@ export const UploadPage = () => {
               <ToggleButton isToggled={isToggled} onToggle={() => setIsToggled(!isToggled)} className='justify-end' />
               {errorMessage && <div className='text-red-500 text-sm mt-2'>{errorMessage}</div>}
               <DragAndDrop
-                onFilesSelected={handleFilesSelected}
+                onFileSelected={handleFileSelected}
                 disabled={isDragAndDropDisabled}
-                selectedFiles={selectedFiles}
+                selectedFile={selectedFile}
+                stepMessage={stepMessage}
               />
             </div>
-            <button
-              onClick={() => handleUpload(isToggled)}
-              disabled={isUploading || (buttonLabel === 'Upload' && selectedFiles.length === 0)}
-              className={`w-auto px-6 py-2 rounded-lg text-white ${
-                isUploading || (buttonLabel === 'Upload' && selectedFiles.length === 0)
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-neutral-600 hover:bg-neutral-700'
-              }`}
-            >
-              {isUploading ? 'Processing...' : buttonLabel}
-            </button>
+            {pdfUrl !== null ? (
+              <div className='flex flex-col gap-4'>
+                <button onClick={downloadPdf} className='btn-download'>
+                  Download PDF
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => handleUpload(isToggled)}
+                disabled={isUploading || (buttonLabel === 'Upload' && selectedFile === null)}
+                className={`w-auto px-6 py-2 rounded-lg text-white ${
+                  isUploading || (buttonLabel === 'Upload' && selectedFile === null)
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-neutral-600 hover:bg-neutral-700'
+                }`}
+              >
+                {generating ? 'Generating...' : buttonLabel}
+              </button>
+            )}
           </div>
         </div>
       </section>
