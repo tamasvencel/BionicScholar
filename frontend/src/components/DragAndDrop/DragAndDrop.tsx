@@ -1,24 +1,25 @@
 import React from 'react';
 
 interface DragAndDropProps {
-  selectedFiles: File[];
-  onFilesSelected: (files: File[]) => void;
+  selectedFile: File | null;
+  onFileSelected: (file: File) => void;
   disabled: boolean;
+  stepMessage: string;
 }
 
-export const DragAndDrop: React.FC<DragAndDropProps> = ({ onFilesSelected, disabled, selectedFiles }) => {
+export const DragAndDrop: React.FC<DragAndDropProps> = ({ onFileSelected, disabled, selectedFile, stepMessage }) => {
   const handleDrop = (e: React.DragEvent<HTMLLabelElement>) => {
     e.preventDefault();
     if (!disabled) {
-      const files = Array.from(e.dataTransfer.files);
-      onFilesSelected(files);
+      const file = e.dataTransfer.files[0];
+      onFileSelected(file);
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!disabled) {
-      const files = e.target.files ? Array.from(e.target.files) : [];
-      onFilesSelected(files);
+      const file = e.target.files?.[0];
+      onFileSelected(file as File);
     }
   };
 
@@ -55,20 +56,12 @@ export const DragAndDrop: React.FC<DragAndDropProps> = ({ onFilesSelected, disab
             <p className='mb-2 text-sm text-gray-500'>
               <span className='font-semibold'>Click to upload</span> or drag and drop
             </p>
-            {selectedFiles.length > 0 && (
-              <p className='text-xs text-gray-500'>{selectedFiles.map((file) => file.name).join(', ')}</p>
-            )}
+            {selectedFile !== null && <p className='text-xs text-gray-500'>{selectedFile?.name}</p>}
           </>
         )}
+        {disabled && stepMessage && <p className='text-sm text-gray-600 mt-2'>{stepMessage}</p>}
       </div>
-      <input
-        id='dropzone-file'
-        type='file'
-        className='hidden'
-        multiple
-        onChange={handleFileChange}
-        disabled={disabled}
-      />
+      <input id='dropzone-file' type='file' className='hidden' onChange={handleFileChange} disabled={disabled} />
     </label>
   );
 };
