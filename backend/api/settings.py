@@ -34,21 +34,7 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 ALLOWED_HOSTS = []
 
 # Specify tesseract path
-
-# Get current operating system
-current_os = platform.system()
-
-# Specify the Tesseract path based on the operating sytem
-if current_os == "Windows":
-    tesseract_path = os.path.join(os.getcwd(), "app", "tesseract", "tesseract.exe")
-elif current_os == 'Darwin':  # MacOS
-    # Path to the bundled Tesseract executable for MacOS
-    tesseract_path = os.path.join(os.getcwd(), 'tesseract', 'tesseract')
-elif current_os == 'Linux':
-    # Path to the bundled Tesseract executable for Linux
-    tesseract_path = os.path.join(os.getcwd(), 'tesseract', 'tesseract')
-       
-pytesseract.pytesseract.tesseract_cmd = tesseract_path
+pytesseract.pytesseract.tesseract_cmd = 'tesseract'
 
 # Application definition
 
