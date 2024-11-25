@@ -1,0 +1,43 @@
+# Ignore Python bytecode files
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+
+# Ignore virtual environment
+env/
+.venv/
+venv
+
+# Ignore local environment variables
+.env
+*.env
+
+# Ignore database files
+*.sqlite3
+db.sqlite3
+
+# Ignore log files and temporary files
+*.log
+*.swp
+*.swo
+*.swn
+*.tmp
+
+# Ignore compiled files and directories
+*.o
+*.a
+*.so
+*.dll
+
+# Ignore Tesseract binary
+tesseract/
+
+# Ignore any node_modules (if using frontend assets)
+node_modules/
+
+# Ignore Docker-related files
+Dockerfile
+docker-compose.yml
+
+# ignore git repo dir
+.git
