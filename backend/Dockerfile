@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
     libtesseract-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Libmagic
+RUN apt-get update && apt-get install -y libmagic1
+
 # Install dependencies
 RUN pip install --upgrade pip
 COPY requirements.txt .

@@ -119,9 +119,9 @@ class AnalyzeResearchPaper:
         Distribute the text extraction to several workers for parallel processing.
         """
         extracted_texts = [""] * len(image_paths)
-        
+                                
         # Use ThreadPoolExecutor for concurrent extraction
-        with ThreadPoolExecutor(max_workers=10) as executor:
+        with ThreadPoolExecutor(max_workers=1) as executor:
             futures = [executor.submit(self.__extract_text_from_a_single_image, data, idx) for idx, data in enumerate(image_paths)]
             
             for future in as_completed(futures):
@@ -133,9 +133,9 @@ class AnalyzeResearchPaper:
     
     def __extract_text_from_a_single_image(self, image_path, image_idx):
         """
-        Extract text from a single image using PaddleOCR.
+        Extract text from a single image using Tesseract.
         """
-
+        
         image = Image.open(image_path)
         
         text_from_image = pytesseract.image_to_string(image)
