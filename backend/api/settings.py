@@ -16,8 +16,13 @@ import os
 import platform
 import pytesseract
 
-# Load env variables
-load_dotenv()
+# Check environment
+environment = os.getenv('ENVIRONMENT', 'development')
+
+if environment == 'development':
+    load_dotenv('.env.dev')  # Load development env vars
+elif environment == 'production':
+    load_dotenv('.env.prod')  # Load production env vars
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,7 +39,7 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 ALLOWED_HOSTS = []
 
 # Specify tesseract path
-pytesseract.pytesseract.tesseract_cmd = 'tesseract'
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
 # Application definition
 
