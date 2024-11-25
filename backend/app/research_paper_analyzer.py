@@ -66,10 +66,11 @@ class AnalyzeResearchPaper:
 
         pdf_url = f"{settings.MEDIA_URL}output_pdf/{output_pdf_name}"
 
-        self.send_completed_message({
-            "message": "Analysis completed. You can now download the generated PDF.",
-            "pdf_url": pdf_url
-        }, 3)
+        self.send_completed_message(
+            message="Analysis completed. You can now download the generated PDF.",
+            pdf_url=pdf_url,
+            progress= 3
+        )
 
     def __load_pdf(self, file_path):
         """
