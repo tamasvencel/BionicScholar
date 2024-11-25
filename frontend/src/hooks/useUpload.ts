@@ -5,7 +5,6 @@ import axios from 'axios';
 export const useUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [buttonLabel, setButtonLabel] = useState('Upload');
   const [errorMessage, setErrorMessage] = useState('');
   const [generating, setGenerating] = useState(false);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -14,7 +13,7 @@ export const useUpload = () => {
 
   const [stepMessage, setStepMessage] = useState();
 
-  const { lastJsonMessage, getWebSocket } = useWebSocket(webSocketEndpoint, {
+  const { lastJsonMessage, getWebSocket, sendJsonMessage } = useWebSocket(webSocketEndpoint, {
     onOpen: () => {
       console.log('WebSocket connection opened');
       setGenerating(true);
@@ -36,8 +35,8 @@ export const useUpload = () => {
       }
 
       if (data.type === 'completed') {
-        setStepMessage(data.filename.message); // Update step message to show completion
-        setPdfUrl(`http://127.0.0.1:8000${data.filename.pdf_url}`); //
+        setStepMessage(data.message); // Update step message to show completion
+        setPdfUrl(`http://127.0.0.1:8000${data.pdf_url}`); //
       }
     },
     share: true,
@@ -70,32 +69,25 @@ export const useUpload = () => {
     setIsUploading(true);
 
     try {
-      if (buttonLabel === 'Upload') {
-        setButtonLabel('Generate');
-      } else if (buttonLabel === 'Generate') {
-        console.log('Sending toggle state:', { isBionicReadingEnabled: isToggled });
+      console.log('Sending toggle state:', { isBionicReadingEnabled: isToggled });
 
-        if (!selectedFile) return;
+      if (!selectedFile) return;
 
-        const formData = new FormData();
-        formData.append('file', selectedFile);
+      const formData = new FormData();
+      formData.append('file', selectedFile);
 
-        console.log('Uploading file:', selectedFile.name);
+      console.log('Uploading file:', selectedFile.name);
 
-        const response = await axios.post(
-          'http://127.0.0.1:8000/api/upload/',
-          { formData, bionic_reading: isToggled },
-          {
-            headers: { 'Content-Type': 'multipart/form-data' }, // Optional; axios sets this automatically
-          }
-        );
+      const response = await axios.post('http://127.0.0.1:8000/api/upload/', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }, // Optional; axios sets this automatically
+      });
 
-        const fileName = selectedFile.name;
-        console.log(fileName);
+      const fileName = selectedFile.name;
+      console.log(fileName);
 
-        if (response.status >= 200 && response.status < 300) {
-          setWebSocketEndpoint(`ws://localhost:8000/ws/research_papers/${fileName}/`);
-        }
+      if (response.status >= 200 && response.status < 300) {
+        setWebSocketEndpoint(`ws://localhost:8000/ws/research_papers/${fileName}/`);
+        sendJsonMessage({ type: 'pdf_analyzer', bionic_reading: isToggled });
       }
     } catch (error) {
       console.error('Error during the operation:', error);
@@ -117,7 +109,7 @@ export const useUpload = () => {
   return {
     selectedFile,
     isUploading,
-    buttonLabel,
+
     downloadPdf,
     errorMessage,
     pdfUrl,

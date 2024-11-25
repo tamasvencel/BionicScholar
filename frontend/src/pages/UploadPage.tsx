@@ -8,7 +8,7 @@ export const UploadPage = () => {
   const {
     selectedFile,
     isUploading,
-    buttonLabel,
+
     errorMessage,
     handleFileSelected,
     generating,
@@ -20,7 +20,7 @@ export const UploadPage = () => {
   const [isToggled, setIsToggled] = useState(false);
 
   // Drag-and-Drop should be disabled after a successful upload
-  const isDragAndDropDisabled = buttonLabel === 'Generate';
+  const isDragAndDropDisabled = isUploading || pdfUrl !== null;
 
   return (
     <AppLayout>
@@ -41,7 +41,7 @@ export const UploadPage = () => {
                 onFileSelected={handleFileSelected}
                 disabled={isDragAndDropDisabled}
                 selectedFile={selectedFile}
-                stepMessage={stepMessage}
+                stepMessage={stepMessage || 'Upload your research paper'}
               />
             </div>
             {pdfUrl !== null ? (
@@ -53,14 +53,12 @@ export const UploadPage = () => {
             ) : (
               <button
                 onClick={() => handleUpload(isToggled)}
-                disabled={isUploading || (buttonLabel === 'Upload' && selectedFile === null)}
+                disabled={isUploading}
                 className={`w-auto px-6 py-2 rounded-lg text-white ${
-                  isUploading || (buttonLabel === 'Upload' && selectedFile === null)
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-neutral-600 hover:bg-neutral-700'
+                  isUploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-neutral-600 hover:bg-neutral-700'
                 }`}
               >
-                {generating ? 'Generating...' : buttonLabel}
+                {generating ? 'Generating...' : 'Generate PDF'}
               </button>
             )}
           </div>
