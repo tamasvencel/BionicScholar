@@ -7,20 +7,15 @@ import { useUpload } from '../hooks/useUpload';
 export const UploadPage = () => {
   const {
     selectedFile,
-    isUploading,
-
     errorMessage,
     handleFileSelected,
     generating,
     downloadPdf,
     stepMessage,
     pdfUrl,
-    handleUpload,
+    handleGenerate,
   } = useUpload();
   const [isToggled, setIsToggled] = useState(false);
-
-  // Drag-and-Drop should be disabled after a successful upload
-  const isDragAndDropDisabled = isUploading || pdfUrl !== null;
 
   return (
     <AppLayout>
@@ -39,27 +34,38 @@ export const UploadPage = () => {
               {errorMessage && <div className='text-red-500 text-sm mt-2'>{errorMessage}</div>}
               <DragAndDrop
                 onFileSelected={handleFileSelected}
-                disabled={isDragAndDropDisabled}
+                generating={generating}
                 selectedFile={selectedFile}
-                stepMessage={stepMessage || 'Upload your research paper'}
+                stepMessage={stepMessage || ''}
               />
             </div>
             {pdfUrl !== null ? (
-              <div className='flex flex-col gap-4'>
-                <button onClick={downloadPdf} className='btn-download'>
+              <div className='flex flex-col gap-4 '>
+                <a
+                  href={pdfUrl}
+                  target='_blank'
+                  rel='noreferrer'
+                  download={'summary.pdf'}
+                  onClick={() => {
+                    downloadPdf();
+                    setIsToggled(false);
+                  }}
+                  className='w-auto px-6 py-2 rounded-lg text-white bg-neutral-600 hover:bg-neutral-700'
+                >
                   Download PDF
-                </button>
+                </a>
               </div>
             ) : (
-              <button
-                onClick={() => handleUpload(isToggled)}
-                disabled={isUploading}
-                className={`w-auto px-6 py-2 rounded-lg text-white ${
-                  isUploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-neutral-600 hover:bg-neutral-700'
-                }`}
-              >
-                {generating ? 'Generating...' : 'Generate PDF'}
-              </button>
+              selectedFile && (
+                <button
+                  onClick={() => handleGenerate(isToggled)}
+                  className={`w-auto px-6 py-2 rounded-lg text-white ${
+                    generating ? 'bg-gray-400 cursor-not-allowed' : 'bg-neutral-600 hover:bg-neutral-700'
+                  }`}
+                >
+                  {generating ? 'Generating...' : 'Generate PDF'}
+                </button>
+              )
             )}
           </div>
         </div>
