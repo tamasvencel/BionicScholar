@@ -2,7 +2,7 @@ import { NavLinkType } from './types';
 
 export const NAV_LINKS: NavLinkType[] = [
   {
-    to: '#home',
+    to: '/',
     name: 'Home',
   },
   {

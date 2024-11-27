@@ -147,9 +147,10 @@ class AnalyzeResearchPaper:
         Extract specific information, summarize and optionally apply bionic reading on research paper
         """
 
-        self.send_progress_message({
-            "message": "Extracting key points"
-        },0)
+        self.send_progress_message(
+            message = "Extracting key points",
+            progress = 0
+        )
 
         # Extract information based on specific key points
         sys_message = [
@@ -182,9 +183,10 @@ class AnalyzeResearchPaper:
         
         final_key_points= self.__truncate_text_after_last_period(key_points)
 
-        self.send_progress_message({
-            "message": "Key points extracted"
-        },1)
+        self.send_progress_message(
+            message = "Key points extracted",
+            progress = 1
+        )
         
         # Summarize the research paper
         hum_message = [
@@ -209,9 +211,10 @@ class AnalyzeResearchPaper:
         
         final_summary = self.__truncate_text_after_last_period(summary)
 
-        self.send_progress_message({
-            "message": "Summary created"
-        },2)
+        self.send_progress_message(
+            message= "Summary created",
+            progress =2
+        )
         
         # get research paper title
         title_prompt = [

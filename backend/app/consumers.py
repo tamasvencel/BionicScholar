@@ -15,7 +15,7 @@ class socketConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_add)(
             self.group_name, self.channel_name
         )
-        
+
         # Accept the WebSocket connection
         self.accept()
 
@@ -31,11 +31,10 @@ class socketConsumer(WebsocketConsumer):
         """
         Handle incoming messages from the WebSocket.
         """
-                
         data = json.loads(text_data)
         if "bionic_reading" in data:
             self.bionic_reading = data["bionic_reading"]
-            
+
         # Trigger PDF analysis when appropriate
         async_to_sync(self.channel_layer.group_send)(
             self.group_name,
@@ -50,7 +49,6 @@ class socketConsumer(WebsocketConsumer):
         """
         Function to generate the custom PDF and send progress updates.
         """
-                                
         bionic_reading = event.get("bionic_reading", False)
 
         AnalyzeResearchPaper(
