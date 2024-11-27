@@ -1,6 +1,9 @@
 services:
-  web:
-    build: .
+  backend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: bionicscolar-backend-dev
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
@@ -10,3 +13,23 @@ services:
       - ./.env.dev
     environment:
       - ENVIRONMENT=development
+
+  backend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+
+    command: daphne -b 0.0.0.0 -p 8000 api.asgi:application
+    volumes:
+      - static_volume:/app/
+      - media_volume:/app/mediafiles/
+    expose:
+      - 8000
+    env_file:
+      - ./.env.prod
+    environment:
+      - ENVIRONMENT=production
+
+volumes:
+  static_volume:
+  media_volume:

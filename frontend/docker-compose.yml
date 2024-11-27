@@ -1,10 +1,24 @@
-version: '3.8'
-
 services:
-  react-app:
+  frontend-dev:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    container_name: bionicscolar-frontend-dev
     ports:
-      - '8080:8080' # Map port 8080 on the host to 8080 in the container
-    restart: unless-stopped
+      - '3000:3000' # Map Vite's dev server port
+    volumes:
+      - .:/app # Mount the current directory for live development
+      - /app/node_modules # Persist node_modules
+    environment:
+      - NODE_ENV=development
+    command: yarn dev --host
+
+  # frontend-prod:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.prod
+  #   container_name: bionicscolar-frontend-prod
+  #   ports:
+  #     - '3000:80' # Map port 8080 to NGINX
+  #   environment:
+  #     - NODE_ENV=production
