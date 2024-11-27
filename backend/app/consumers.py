@@ -2,6 +2,9 @@ from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 import json
 from app.research_paper_analyzer import AnalyzeResearchPaper
+from django.conf import settings
+import os
+import shutil
 
 class socketConsumer(WebsocketConsumer):
     def connect(self):
@@ -23,6 +26,16 @@ class socketConsumer(WebsocketConsumer):
         """
         Called when the WebSocket connection closes.
         """
+        
+         # Empty folders
+        temp_images_folder = f"{settings.MEDIA_ROOT}/temp_images/"
+
+        if os.path.exists(temp_images_folder):
+            shutil.rmtree(temp_images_folder)
+            
+        if os.path.exists(f"{settings.MEDIA_ROOT}/research_papers/"):
+            shutil.rmtree(f"{settings.MEDIA_ROOT}/research_papers/")
+        
         async_to_sync(self.channel_layer.group_discard)(
             self.group_name, self.channel_name
         )
