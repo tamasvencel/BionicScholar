@@ -119,9 +119,9 @@ class AnalyzeResearchPaper:
         Distribute the text extraction to several workers for parallel processing.
         """
         extracted_texts = [""] * len(image_paths)
-        
+                                
         # Use ThreadPoolExecutor for concurrent extraction
-        with ThreadPoolExecutor(max_workers=10) as executor:
+        with ThreadPoolExecutor(max_workers=1) as executor:
             futures = [executor.submit(self.__extract_text_from_a_single_image, data, idx) for idx, data in enumerate(image_paths)]
             
             for future in as_completed(futures):
@@ -133,9 +133,9 @@ class AnalyzeResearchPaper:
     
     def __extract_text_from_a_single_image(self, image_path, image_idx):
         """
-        Extract text from a single image using PaddleOCR.
+        Extract text from a single image using Tesseract.
         """
-
+        
         image = Image.open(image_path)
         
         text_from_image = pytesseract.image_to_string(image)
@@ -147,9 +147,10 @@ class AnalyzeResearchPaper:
         Extract specific information, summarize and optionally apply bionic reading on research paper
         """
 
-        self.send_progress_message({
-            "message": "Extracting key points"
-        },0)
+        self.send_progress_message(
+            message = "Extracting key points",
+            progress = 0
+        )
 
         # Extract information based on specific key points
         sys_message = [
@@ -182,9 +183,10 @@ class AnalyzeResearchPaper:
         
         final_key_points= self.__truncate_text_after_last_period(key_points)
 
-        self.send_progress_message({
-            "message": "Key points extracted"
-        },1)
+        self.send_progress_message(
+            message = "Key points extracted",
+            progress = 1
+        )
         
         # Summarize the research paper
         hum_message = [
@@ -209,9 +211,10 @@ class AnalyzeResearchPaper:
         
         final_summary = self.__truncate_text_after_last_period(summary)
 
-        self.send_progress_message({
-            "message": "Summary created"
-        },2)
+        self.send_progress_message(
+            message= "Summary created",
+            progress =2
+        )
         
         # get research paper title
         title_prompt = [

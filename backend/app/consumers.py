@@ -43,6 +43,7 @@ class socketConsumer(WebsocketConsumer):
                 "bionic_reading": self.bionic_reading
             }
         )
+        
 
     def pdf_analyzer(self, event):
         """

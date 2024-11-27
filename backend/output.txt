@@ -1,0 +1,51 @@
+OO
+
+Attention Is All You Need
+
+‘Ashish Vaswani Noam Shazeer” Niki Parmar” Jakob Usshoret™
+Google Brin Goople Brain Google Reveach Google Research
+
+‘srasvaniOgeogle.con noandgoogle.con nikiptgoogle con uastgoagie. con
+
+ion Jones” Aidan N. Gomes"! uae Kaiser”
+Google Reearch University of Toronto Google Brain
+Liosdgecgle.com aidantes.toronto.eds _Lukaszkatnertgoogle.coa
+
+Mia Potosakhin®*
+‘21a, polonubhindgnest.com
+
+Abstract
+
+‘The dominant sequence transdecton models are based on complex recurrent
+‘convolutional neural networks ta include an cacoder and sJeceder The bo
+‘esforming models also connect the encoder and decoder through an atenon
+‘mechani. We proponeu new simple netwoek archecture, the Trasfortner,
+tused solely on aeauon mechanisms, dispesing wih recurrence ad conolains
+nies. Experiments on two machine tanslaion tasks show these med
+be superior inqulty whie being more paraleliable and rausing signcandy
+les time to an. Our ml achieves 28-4 BLEU on the WMT S01 Engl
+{oGerman watslation sk, improving over the existing best esas acing
+msembies, by over 2 BLEU. On the WMT 2014 English French anstion ta
+‘model esses a ew singe smoxelsite-of-e art BLE sear of 10 se
+training for 3 ‘eht GPUs, small action of the traning eet of the
+tet models from he Mert
+
+1 Introduction
+
+Recurrent neural networks, long shor: term memory [12] and gated ecurten {7} acura aetworks
+in priculr have been firmly exalishedas sate ofthe at appachesinsaquence madeling wed
+‘tansdaction probes such a language medeling and machin transation [59,2 3}, Numerous
+efforts hae since conic to psh the boundaries recuret language mises and cnc deer
+techtectures [3,21 13).
+
+snc gal catia, Unig rr rao. Jah propo racing RN wt esc and std
+theft to cali ths en. Ath, with Ml, dsgne salem och anor sea sod
+‘es ben eral iolvedin very spect ths wet Noam pra aed dept woe. ead
+stctog and te prance poston repent came tha freon aed set
+(tail Nik designed implement. tue and crated colo mo ais ine rp acted
+‘enema Lio lo eprint with ol del wrap fe eal cad sed
+tcc infra and visalvatoas kane and Avan tous lange dnpang sete ee
+‘eptemaing verre eigen pay mony toad mney See
+Mek proms wil a Gong Bain,
+
+31s Confrence New nfrmaton Prceing Systems (NIPS 2017) Long Beach CA, USA,
