@@ -18,6 +18,7 @@ export default {
           200: '#d4d1d0',
         },
         secondary: {
+          100: '#7baca4',
           300: '#5a978d',
           600: '#136A5C',
           700: '#115f53',

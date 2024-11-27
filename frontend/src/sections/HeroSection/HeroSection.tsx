@@ -1,4 +1,4 @@
-import { LinkButton } from '../../atoms/Buttons/Button';
+import { LinkButton } from '../../atoms/Buttons/LinkButton';
 import hero from '../../assets/images/hero.png';
 
 export const HeroSection = () => {
