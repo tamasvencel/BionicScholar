@@ -3,6 +3,13 @@ import useWebSocket from 'react-use-websocket';
 import axios from 'axios';
 import { ROUTES } from '../utils';
 
+interface WebSocketMessage {
+  type: 'progress' | 'completed';
+  progress: number;
+  message: string;
+  pdf_url?: string;
+}
+
 export const useUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
@@ -12,7 +19,7 @@ export const useUpload = () => {
 
   const [webSocketEndpoint, setWebSocketEndpoint] = useState<string | null>(null);
 
-  const { lastJsonMessage, getWebSocket, sendJsonMessage } = useWebSocket(webSocketEndpoint, {
+  const { lastJsonMessage, getWebSocket, sendJsonMessage } = useWebSocket<WebSocketMessage>(webSocketEndpoint, {
     onOpen: () => {
       setGenerating(true);
     },
@@ -28,7 +35,7 @@ export const useUpload = () => {
       const data = JSON.parse(message.data);
 
       if (data.type === 'progress') {
-        setStepMessage(`Step ${data.progress + 1}/3: ${data.message.message}`);
+        setStepMessage(`Step ${data.progress + 1}/3: ${data.message}`);
       }
 
       if (data.type === 'completed') {
