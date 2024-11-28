@@ -78,6 +78,7 @@ export const useUpload = () => {
 
       const response = await axios.post(ROUTES.UPLOAD, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true,
       });
 
       const fileName = selectedFile.name;

@@ -26,3 +26,8 @@ urlpatterns = [
 
 if settings.DEBUG == 1:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    
+if settings.DEBUG == 0:
+    urlpatterns += [
+        re_path(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    ]
