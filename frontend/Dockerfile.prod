@@ -12,6 +12,11 @@ RUN yarn
 # Copy the rest of the application code
 COPY . .
 
-# Expose port 80 for the container (Azure handles serving)
-EXPOSE 80
-CMD ["echo", "Static files ready for Azure."]
+# Build the React app for production
+RUN yarn build
+
+# Install 'serve' to serve static files
+RUN yarn global add serve
+
+# Use 'serve' to serve the static files from the 'build' directory
+CMD ["serve", "-s", "dist", "-l", "80"]

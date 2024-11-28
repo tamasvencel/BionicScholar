@@ -12,7 +12,7 @@ RUN yarn
 COPY . .
 
 # Expose the dev server port (Vite default is 5173)
-EXPOSE 3000
+EXPOSE 80
 
 # Start the development server
 CMD ["yarn", "dev", "--host"]
