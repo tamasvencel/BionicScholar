@@ -12,11 +12,6 @@ RUN yarn
 # Copy the rest of the application code
 COPY . .
 
-# Build the React application
-RUN yarn build
-
-FROM nginx:alpine
-
-COPY --from=build /app/dist /usr/share/nginx/html
+# Expose port 80 for the container (Azure handles serving)
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["echo", "Static files ready for Azure."]
