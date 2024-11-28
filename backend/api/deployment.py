@@ -2,10 +2,10 @@ import os
 from .settings import *
 from .settings import BASE_DIR
 
-CORS_ALLOW_ALL_ORIGINS = False
 ALLOWED_HOSTS = [os.environ["WEBSITE_HOSTNAME"]]
 CSRF_TRUSTED_ORIGINS = ["https://" + os.environ["WEBSITE_HOSTNAME"]]
-DEBUG = 0
+DEBUG = False
+CORS_ALLOW_ALL_ORIGINS = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -32,7 +32,5 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
-
-CORS_ALLOW_CREDENTIALS = True
 
 SERVE_MEDIA = True
