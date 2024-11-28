@@ -15,7 +15,9 @@ from django.core.asgi import get_asgi_application
 
 from app.routing import websocket_urlpatterns
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings')
+settings_module = "api.deployment" if "WEBSITE_HOSTNAME" in os.environ else "api.settings"
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
+
 django_asgi_app = get_asgi_application() 
 
 application = ProtocolTypeRouter(
