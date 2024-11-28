@@ -20,7 +20,9 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware"
 ]
 
-#CORS_ALLOWED_ORIGINS = []
+CORS_ALLOWED_ORIGINS = [
+    "https://bionicscholar-frontend-arfrffe7f3c6b8fz.germanywestcentral-01.azurewebsites.net"
+]
 
 STORAGES = {
     "default": {
