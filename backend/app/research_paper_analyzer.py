@@ -47,7 +47,7 @@ class AnalyzeResearchPaper:
         # Extract information from PDF
         analyzed_pdf_text = self.__extract_info(document=pdf_text)
 
-        print(analyzed_pdf_text)
+        # print(analyzed_pdf_text)
 
         # Define the output path for the new PDF
         output_pdf_name = os.path.basename(self.research_paper_file_path) # Get the original file name with extension
