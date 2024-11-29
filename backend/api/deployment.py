@@ -2,8 +2,8 @@ import os
 from .settings import *
 from .settings import BASE_DIR
 
-ALLOWED_HOSTS = [os.environ["WEBSITE_HOSTNAME"]]
-CSRF_TRUSTED_ORIGINS = ["https://" + os.environ["WEBSITE_HOSTNAME"]]
+ALLOWED_HOSTS = [os.environ.get("WEBSITE_HOSTNAME")]
+CSRF_TRUSTED_ORIGINS = ["https://" + os.environ.get("WEBSITE_HOSTNAME")]
 DEBUG = False
 CORS_ALLOW_ALL_ORIGINS = False
 
@@ -21,7 +21,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://bionicscholar-frontend-arfrffe7f3c6b8fz.germanywestcentral-01.azurewebsites.net"
+    "https://bionicscholar-frontend-arfrffe7f3c6b8fz.germanywestcentral-01.azurewebsites.net",
+    f"https://{os.environ.get("WEBSITE_HOSTNAME")}"
 ]
 
 STORAGES = {
@@ -32,5 +33,7 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
+
+CORS_ALLOW_CREDENTIALS = True
 
 SERVE_MEDIA = True
