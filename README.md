@@ -1,3 +1,4 @@
+
 # BionicScholar
 
 Welcome to the **BionicScholar** repository! BionicScholar is a platform designed to simplify and enhance the research reading experience by **summarizing research papers** and applying **Bionic Reading** techniques for easier comprehension.
@@ -142,11 +143,14 @@ Now your backend is running on http://localhost:8000
 
    `pip install -r requirements.txt`
 
-4. Run migrations:
+4. (Only on macOS) If you are having difficulty importing libmagic for the python-magic package please refer to the following Stack Overflow Q&A thread:
+    https://stackoverflow.com/questions/73398716/difficulty-importing-module-in-python-that-was-installed-via-homebrew-on-m1-pro
+
+5. Run migrations:
 
    `python manage.py migrate`
 
-5. (This is only needed if you don't use Windows operating system)
+6. (This is only needed if you don't use Windows operating system)
 
    **Tesseract OCR**:
 
@@ -158,7 +162,7 @@ Now your backend is running on http://localhost:8000
 
    Set it up to the`backend/app/` folder.
 
-6. Start server:
+7. Start server:
 
    `python manage.py runserver`
 
