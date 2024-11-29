@@ -1,0 +1,22 @@
+# Stage 1: Build the React application
+FROM node:20.18.1-alpine3.19 AS build
+
+WORKDIR /app
+
+# Copy package.json and yarn.lock
+COPY package.json yarn.lock ./
+
+# Install dependencies
+RUN yarn
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the React app for production
+RUN yarn build
+
+# Install 'serve' to serve static files
+RUN yarn global add serve
+
+# Use 'serve' to serve the static files from the 'build' directory
+CMD ["serve", "-s", "dist", "-l", "80"]

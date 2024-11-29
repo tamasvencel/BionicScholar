@@ -1,3 +1,5 @@
 from django.db import models
 
-# Create your models here.
+# model for storing research papers
+class Doc(models.Model):
+    file = models.FileField(upload_to="research_papers/")

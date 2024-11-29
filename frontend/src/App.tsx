@@ -1,5 +1,17 @@
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { LandingPage, UploadPage } from './pages';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <LandingPage />,
+  },
+  {
+    path: '/upload',
+    element: <UploadPage />,
+  },
+]);
+
 export default function App() {
-  return (
-    <h1 className="text-3xl font-bold underline text-blue-600">Hello world!</h1>
-  );
+  return <RouterProvider router={router} />;
 }

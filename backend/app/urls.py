@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import TEST
+from .views import UploadDocView
 
 urlpatterns = [
-    path("test/", TEST.as_view(), name="SimpleName")
+    path("upload/", UploadDocView.as_view(), name="UploadResearchPaper")
 ]
