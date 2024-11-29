@@ -3,6 +3,8 @@ import useWebSocket from 'react-use-websocket';
 import axios from 'axios';
 import { ROUTES } from '../utils';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 interface WebSocketMessage {
   type: 'progress' | 'completed';
   progress: number;
@@ -76,10 +78,18 @@ export const useUpload = () => {
       const formData = new FormData();
       formData.append('file', selectedFile);
 
-      const response = await axios.post(ROUTES.UPLOAD, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        withCredentials: true,
-      });
+      let response;
+
+      if (isProduction) {
+        response = await axios.post(ROUTES.UPLOAD, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          withCredentials: true,
+        });
+      } else {
+        response = await axios.post(ROUTES.UPLOAD, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+      }
 
       const fileName = selectedFile.name;
 
