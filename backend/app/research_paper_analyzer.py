@@ -226,6 +226,7 @@ class AnalyzeResearchPaper:
                 Please provide the response as follows:
                 - |TITLE|
                 - before and after the | characters should be nothing.
+                - your response should include only the title, in a single line, this is usually found in the first line of the document.
                 
                 The research paper: {document}
                 """
