@@ -66,7 +66,7 @@ Bionic Reading is a technique that enhances reading speed and retention by boldi
 
 ### Frontend Installation
 
-Clone the repository and navigate to the frontend directory:
+Clone the repository and navigate to the BionicScholar directory:
 
     git clone https://github.com/tamasvencel/BionicScholar.git
 
@@ -162,4 +162,4 @@ Now your backend is running on http://localhost:8000
 
    `python manage.py runserver`
 
-Now your backend running on http://localhost:8000
+Now your backend is running on http://localhost:8000
